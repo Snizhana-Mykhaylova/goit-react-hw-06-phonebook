@@ -3,7 +3,14 @@ import { createReducer } from '@reduxjs/toolkit';
 import * as actions from './phonebook-actions';
 
 const contactsReducer = createReducer([], {
-  [actions.addContact]: (state, { payload }) => [...state, payload],
+  [actions.addContact]: (state, { payload }) => {
+    const normalizedName = payload.name.toLowerCase();
+    if (state.find(contact => contact.name.toLowerCase() === normalizedName)) {
+      alert(`${payload.name} is already in contacts`);
+      return;
+    }
+    return [...state, payload];
+  },
   [actions.deleteContact]: (state, { payload }) =>
     state.filter(({ id }) => id !== payload),
 });
